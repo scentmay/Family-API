@@ -25,18 +25,40 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+# Recuperar todos los miembros de la familia
 @app.route('/members', methods=['GET'])
-def handle_hello():
-
-    # this is how you can use the Family datastructure by calling its methods
+def getAllMembers():
     members = jackson_family.get_all_members()
     response_body = {
-        "hello": "world",
-        "family": members
+        "Jackson-family": members
     }
-
-
     return jsonify(response_body), 200
+
+# Insertar un miembro en la familia
+@app.route('/member', methods=['POST'])
+def createMember():
+    info_request = request.json
+    if (jackson_family.add_member(info_request) == True):
+        return jsonify("Usuario creado"), 200
+    else:
+        return jsonify("Ocurrió un error al agregar el miembro de la familia"), 400
+       
+    
+# Recuperar uno de los miembros de la familia
+@app.route('/members/<int:id>', methods=['GET'])
+def getOneMember(id):
+    member = jackson_family.get_member(id)
+    return jsonify(member), 200
+
+# Eliminar uno de los miembros de la familia
+@app.route('/members/<int:id>', methods=['DELETE'])
+def deleteOneMember(id):
+    estado = jackson_family.delete_member(id)
+    if (estado == True):
+        return "Miembro de la familia eliminado correctamente", 200
+    else:
+        return "Ocurrió un error al agregar el miembro", 400
+
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
