@@ -29,10 +29,7 @@ def sitemap():
 @app.route('/members', methods=['GET'])
 def getAllMembers():
     members = jackson_family.get_all_members()
-    response_body = {
-        "Jackson-family": members
-    }
-    return jsonify(response_body), 200
+    return jsonify(members), 200
 
 # Insertar un miembro en la familia
 @app.route('/member', methods=['POST'])
@@ -45,10 +42,16 @@ def createMember():
        
     
 # Recuperar uno de los miembros de la familia
-@app.route('/members/<int:id>', methods=['GET'])
+@app.route('/member/<int:id>', methods=['GET'])
 def getOneMember(id):
     member = jackson_family.get_member(id)
-    return jsonify(member), 200
+    if member is False:
+        return "Ocurrió un error al agregar el miembro", 404
+    else:
+        response_body = {
+        "family": member
+    }
+    return jsonify(response_body), 200
 
 # Eliminar uno de los miembros de la familia
 @app.route('/members/<int:id>', methods=['DELETE'])
