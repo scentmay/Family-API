@@ -29,29 +29,35 @@ def sitemap():
 @app.route('/members', methods=['GET'])
 def getAllMembers():
     members = jackson_family.get_all_members()
-    return jsonify(members), 200
+    if members:
+        return jsonify(members), 200
+    else:
+        return "Ha ocurrido un error", 400
+
+ # Recuperar uno de los miembros de la familia
+@app.route('/member/<int:id>', methods=['GET'])
+def getOneMember(id):
+    member = jackson_family.get_member(id)
+
+    response_body = {
+            "family": member
+        }
+    return jsonify(response_body), 200
 
 # Insertar un miembro en la familia
 @app.route('/member', methods=['POST'])
 def createMember():
-    info_request = request.json
-    if (jackson_family.add_member(info_request) == True):
+    member = {
+        "first_name": request.json.get("first_name"),
+        "age": request.json.get("age"),
+        "lucky_numbers": request.json.get("lucky_numbers"),
+        "id": request.json.get("id")
+    }
+
+    if (jackson_family.add_member(member) == True):
         return jsonify("Usuario creado"), 200
     else:
         return jsonify("Ocurrió un error al agregar el miembro de la familia"), 400
-       
-    
-# Recuperar uno de los miembros de la familia
-@app.route('/member/<int:id>', methods=['GET'])
-def getOneMember(id):
-    member = jackson_family.get_member(id)
-    if member is False:
-        return "Ocurrió un error al agregar el miembro", 404
-    else:
-        response_body = {
-        "family": member
-    }
-    return jsonify(response_body), 200
 
 # Eliminar uno de los miembros de la familia
 @app.route('/members/<int:id>', methods=['DELETE'])

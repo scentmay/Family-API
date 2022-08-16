@@ -16,22 +16,25 @@ class FamilyStructure:
         self._members = [
              {
             "id": 1,
-            "first_name": "John Jackson",
+            "first_name": "John",
+            "last_name": last_name,
             "age": 33 ,
             "lucky_numbers":[7, 13, 22],
             },
             {
             "id": 2,
-            "first_name": "Jane Jackson",
+            "first_name": "Jane",
+            "last_name": last_name,
             "age": 35,
             "lucky_numbers":[10, 14, 3],
             },
             {
             "id": 3,
-            "first_name": "Jimmy Jackson",
+            "first_name": "Jimmy",
+            "last_name": last_name,
             "age": 5 ,
             "lucky_numbers":[1],
-            },
+            }
         ]
 
     # read-only: Use this method to generate random members ID's when adding members into the list
@@ -39,36 +42,50 @@ class FamilyStructure:
         return randint(0, 99999999)
 
 #----------------método POST----------------------
-# método para devolver un miembro por id
+# método para añadir un miembro: 
     def add_member(self, member):
-        # VALIDACIÓN DEL MÉTODO:
-        # 1.- generamos un id y lo asignamos al objeto recibido
-        # 2.- añadimos miembro al array de la familia con el id creado
-        # 3.- comprobamos que haya aglun miembro en el array de la familia con el id que creamos para este miembro
-        # 4.- caso de que exista, devolvemos true
+        # Comprobamos si el objeto viene con id, caso que no, se lo generamos
+        if(not member["id"]):
+            member["id"] = self._generateId()
+          
+        # Siviene con id, comprobamos que no exista ya de antemano ese id:
+        # Para ello, recorremos el array de la familia 
+        # comprobamos el id de cada miembro con el del objeto recibido
+        # en caso de que coincida, le generamos id nuevo
+
+        for person in self._members:
+            if(member["id"] == person["id"]):
+                member["id"] = self._generateId() 
         
-        identifier = randint(0, 99999999)
-        #print (identifier)
-        member["id"] = identifier
-        #print (member["id"])
+        #añadimos el apellido de la familia
+        member["last_name"] = self.last_name
+
+        #añadimos el nuevo miembro a la familia
         self._members.append(member)
-        for member in self._members:
-            if (member["id"] == identifier):
-                return True
+
+        return True        
      
 #----------------métodos GET----------------------
-
-# método para devolver un miembro por id
-    def get_member(self, id):
-        # fill this method and update the return
-        for member in self._members:
-            if member["id"] == id:
-                return member
 
 # método para devolver todos los miembros de la familia
     # this method is done, it returns a list with all the family members
     def get_all_members(self):
         return self._members
+
+# método para devolver un miembro por id
+    def get_member(self, id):
+        # fill this method and update the return
+        for person in self._members:
+            if (person["id"] == id):
+                return person
+            else:
+                member = {
+                "first_name": "No encontrado",
+                "age": "No encontrado",
+                "lucky_numbers": "No encontrado",
+                "id": "No encontrado"
+                }
+                return member
 
 #----------------método DELETE----------------------
 # método para eliminar un miembro por id
