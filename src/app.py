@@ -39,15 +39,12 @@ def getAllMembers():
 @app.route("/member/<int:id>", methods=["GET"])
 def getOneMember(id):
     member = jackson_family.get_member(id)
-
-    response_body = {
-            "family": member
-        }
-    return jsonify(response_body), 200
+    return jsonify(member), 200
 
 # Insertar un miembro en la familia
 @app.route('/member', methods=['POST'])
 def createMember():
+    # Formateamos el objeto como nos interesa para que cuando se devuelva no de error
     member = {
         "id": request.json.get("id"),
         "first_name": request.json.get("first_name"),
@@ -61,12 +58,12 @@ def createMember():
         return jsonify("Ocurrió un error al agregar el miembro de la familia"), 400
 
 # Eliminar uno de los miembros de la familia
-@app.route('/members/<int:id>', methods=['DELETE'])
+@app.route('/member/<int:id>', methods=['DELETE'])
 def deleteOneMember(id):
     estado = jackson_family.delete_member(id)
 
     if estado == True:
-        return jsonify("Miembro de la familia eliminado correctamente"), 200
+        return jsonify({"done": True}), 200
     else:
         return jsonify("Ocurrió un error al eliminar el miembro"), 400
 

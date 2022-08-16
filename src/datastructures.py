@@ -48,7 +48,7 @@ class FamilyStructure:
         if(not member["id"]):
             member["id"] = self._generateId()
           
-        # Siviene con id, comprobamos que no exista ya de antemano ese id:
+        # Si viene con id, comprobamos que no exista ya de antemano ese id:
         # Para ello, recorremos el array de la familia 
         # comprobamos el id de cada miembro con el del objeto recibido
         # en caso de que coincida, le generamos id nuevo
@@ -78,8 +78,8 @@ class FamilyStructure:
         for member in self._members:
             if (member["id"] == id):
                 return member
-            else:
-                return "No existe miembro"
+        # esta sentencia va fuera del if porque si no tendríamos un return en la primera iteración    
+        return "No existe miembro"
 
 #----------------método DELETE----------------------
 # método para eliminar un miembro por id
