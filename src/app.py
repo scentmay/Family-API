@@ -29,13 +29,14 @@ def sitemap():
 @app.route('/members', methods=['GET'])
 def getAllMembers():
     members = jackson_family.get_all_members()
+
     if members:
         return jsonify(members), 200
     else:
-        return "Ha ocurrido un error", 400
+        return jsonify("Ha ocurrido un error"), 400
 
  # Recuperar uno de los miembros de la familia
-@app.route('/member/<int:id>', methods=['GET'])
+@app.route("/member/<int:id>", methods=["GET"])
 def getOneMember(id):
     member = jackson_family.get_member(id)
 
@@ -48,10 +49,10 @@ def getOneMember(id):
 @app.route('/member', methods=['POST'])
 def createMember():
     member = {
+        "id": request.json.get("id"),
         "first_name": request.json.get("first_name"),
         "age": request.json.get("age"),
-        "lucky_numbers": request.json.get("lucky_numbers"),
-        "id": request.json.get("id")
+        "lucky_numbers": request.json.get("lucky_numbers")
     }
 
     if (jackson_family.add_member(member) == True):
@@ -63,13 +64,14 @@ def createMember():
 @app.route('/members/<int:id>', methods=['DELETE'])
 def deleteOneMember(id):
     estado = jackson_family.delete_member(id)
-    if (estado == True):
-        return "Miembro de la familia eliminado correctamente", 200
+
+    if estado == True:
+        return jsonify("Miembro de la familia eliminado correctamente"), 200
     else:
-        return "Ocurrió un error al agregar el miembro", 400
+        return jsonify("Ocurrió un error al eliminar el miembro"), 400
 
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
-    PORT = int(os.environ.get('PORT', 3000))
+    PORT = int(os.environ.get('PORT', 4000))
     app.run(host='0.0.0.0', port=PORT, debug=True)

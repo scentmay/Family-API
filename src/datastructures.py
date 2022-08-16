@@ -75,17 +75,11 @@ class FamilyStructure:
 # método para devolver un miembro por id
     def get_member(self, id):
         # fill this method and update the return
-        for person in self._members:
-            if (person["id"] == id):
-                return person
-            else:
-                member = {
-                "first_name": "No encontrado",
-                "age": "No encontrado",
-                "lucky_numbers": "No encontrado",
-                "id": "No encontrado"
-                }
+        for member in self._members:
+            if (member["id"] == id):
                 return member
+            else:
+                return "No existe miembro"
 
 #----------------método DELETE----------------------
 # método para eliminar un miembro por id
