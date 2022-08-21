@@ -44,11 +44,7 @@ class FamilyStructure:
 #----------------método POST----------------------
 # método para añadir un miembro: 
     def add_member(self, member):
-        # Comprobamos si el objeto viene con id, caso que no, se lo generamos
-        if(not member["id"]):
-            member["id"] = self._generateId()
-          
-        # Si viene con id, comprobamos que no exista ya de antemano ese id:
+        # Si viene con id, comprobamos que no exista ya de antemano ese id
         # Para ello, recorremos el array de la familia 
         # comprobamos el id de cada miembro con el del objeto recibido
         # en caso de que coincida, le generamos id nuevo
@@ -85,10 +81,10 @@ class FamilyStructure:
 # método para eliminar un miembro por id
     def delete_member(self, id):
         # fill this method and update the return
+        family_before = len(self._members)
         for member in self._members:
-            family_before = len(self._members)
             if member["id"] == id:
                 self._members.remove(member)
-            family_after = len(self._members) 
-            if (family_before>family_after):
+        family_after = len(self._members) 
+        if (family_before>family_after):
                 return True

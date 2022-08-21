@@ -39,12 +39,17 @@ def getAllMembers():
 @app.route("/member/<int:id>", methods=["GET"])
 def getOneMember(id):
     member = jackson_family.get_member(id)
+
+    if member == "No existe miembro":
+        return jsonify("Ha ocurrido un error"), 400
+
     return jsonify(member), 200
 
 # Insertar un miembro en la familia
 @app.route('/member', methods=['POST'])
 def createMember():
     # Formateamos el objeto como nos interesa para que cuando se devuelva no de error
+    # Es decir, como sabemos como está construida la BBDD, adecuamos el objeto para ella
     member = {
         "id": request.json.get("id"),
         "first_name": request.json.get("first_name"),
